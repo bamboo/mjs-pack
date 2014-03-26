@@ -142,7 +142,7 @@
 
 (defun mjs-indent-line ()
   "Indent current line of mjs code.
-If the previous non empty line ends in `:' indentation is increased,
+If the previous non empty line ends in any of `({[>' indentation is increased,
 otherwise it stays the same."
   (interactive)
   (let (indent)
@@ -151,7 +151,7 @@ otherwise it stays the same."
       (setq indent
             ; if previous non empty line ends in :
             (if (and (re-search-backward (rx (not (any ?\n whitespace))))
-                     (looking-at "{"))
+                     (looking-at "[{(\[>]"))
                 (+ (current-indentation) mjs-indent-offset)
               (current-indentation))))
     (indent-to indent)))

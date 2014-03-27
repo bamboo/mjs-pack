@@ -131,13 +131,14 @@
             (unless (= i ?_)
               (if (equal symbol (aref sst i))
                   (modify-syntax-entry i "." table)))))
-        (modify-syntax-entry ?$ "." table)
+        (modify-syntax-entry ?$ "_" table)
         (modify-syntax-entry ?% "." table)
         ;; exceptions
         (modify-syntax-entry ?\; "<" table)
         (modify-syntax-entry ?\n ">" table)
         (modify-syntax-entry ?' "\"" table)
-        (modify-syntax-entry ?` "$" table)
+        (modify-syntax-entry ?` "'" table)
+        (modify-syntax-entry ?\# "'" table)
         table))
 
 (defun mjs-indent-line ()

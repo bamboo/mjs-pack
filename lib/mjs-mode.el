@@ -98,7 +98,9 @@
         (,(rx symbol-start (or "arguments" "require" "typeof")
               symbol-end) . mjs-builtin-face)
 
-        (,(rx symbol-start (or "Object" "Array" "String" "Function")
+        (,(rx symbol-start (or "Object" "Array" "String"
+                               "Function" "Number" "Math" "parseInt"
+                               "Boolean" "Date" "JSON" "Error")
               symbol-end) . mjs-type-name-face)
 
         (,(rx symbol-start (or "true" "false" "null" "this" "undefined")

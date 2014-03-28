@@ -86,7 +86,7 @@
 
       ;; Keywords
       `(,(rx symbol-start
-             (or "new")
+             (or "new" "->")
              symbol-end)
 
         (,(rx symbol-start (or "var")
@@ -139,13 +139,16 @@
               (if (equal symbol (aref sst i))
                   (modify-syntax-entry i "." table)))))
         (modify-syntax-entry ?$ "_" table)
+        (modify-syntax-entry ?\- "_" table)
+        (modify-syntax-entry ?\> "_" table)
         (modify-syntax-entry ?% "." table)
         ;; exceptions
         (modify-syntax-entry ?\; "<" table)
         (modify-syntax-entry ?\n ">" table)
         (modify-syntax-entry ?' "\"" table)
+        (modify-syntax-entry ?\\ "\\" table)
         (modify-syntax-entry ?` "'" table)
-        (modify-syntax-entry ?\# "'" table)
+        (modify-syntax-entry ?\# "_" table)
         table))
 
 (defun mjs-indent-line ()

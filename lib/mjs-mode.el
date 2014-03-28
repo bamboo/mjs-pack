@@ -117,7 +117,12 @@
 
         ;; numbers
         (,(rx symbol-start (or (1+ digit) (seq "0x" (1+ hex-digit)))
-              symbol-end) . mjs-number-face)))
+              symbol-end) . mjs-number-face)
+
+
+        ;; preprocessor
+        (,(rx symbol-start (seq ?\# (1+ word))
+              symbol-end) . font-lock-warning-face)))
 
 
 (defvar mjs-mode-syntax-table nil

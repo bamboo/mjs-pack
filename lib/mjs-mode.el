@@ -160,7 +160,6 @@ otherwise it stays the same."
     (save-excursion
       (beginning-of-line)
       (setq indent
-            ; if previous non empty line ends in :
             (if (and (re-search-backward (rx (not (any ?\n whitespace))))
                      (looking-at "[{(\[>]"))
                 (+ (current-indentation) mjs-indent-offset)
@@ -168,7 +167,7 @@ otherwise it stays the same."
     (indent-to indent)))
 
 (defvar mjs-mode-map
-  (let ((map (make-sparse-keymap)))
+  (let ((map (make-sparse-keymap "Metascript")))
     (define-key map (kbd "RET") 'newline-and-indent)
     map))
 

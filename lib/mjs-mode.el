@@ -86,7 +86,7 @@
 
       ;; Keywords
       `(,(rx symbol-start
-             (or "new" "->")
+             (or "new" "delete" "->")
              symbol-end)
 
         (,(rx symbol-start (or "var")

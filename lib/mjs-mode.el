@@ -89,7 +89,7 @@
              (or "new" "delete" "->")
              symbol-end)
 
-        (,(rx symbol-start (or "var")
+        (,(rx symbol-start (or "var" "const")
               symbol-end) . mjs-def-face)
 
         (,(rx symbol-start (or "meta" "macro")

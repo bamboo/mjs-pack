@@ -89,10 +89,10 @@
              (or "new" "delete" "->")
              symbol-end)
 
-        (,(rx symbol-start (or "var" "const")
+        (,(rx symbol-start (or "var" "const" "fun")
               symbol-end) . mjs-def-face)
 
-        (,(rx symbol-start (or "meta" "macro")
+        (,(rx symbol-start (or "#meta" "keep-meta")
               symbol-end) . mjs-modifier-face)
 
         (,(rx symbol-start (or "arguments" "require" "typeof")
@@ -112,7 +112,7 @@
               symbol-end) . mjs-control-flow-face)
 
         ;; functions
-        (,(rx symbol-start (or "var" "macro" "const") (1+ space) (group (seq (1+ (or word ?_ ?- ?>)) (? (any "!?")))))
+        (,(rx symbol-start (or "var" "const" "fun") (1+ space) (group (seq (1+ (or word ?_ ?- ?>)) (? (any "!?")))))
          (1 font-lock-function-name-face))
 
         ;; numbers

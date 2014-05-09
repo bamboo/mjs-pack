@@ -112,7 +112,7 @@
               symbol-end) . mjs-control-flow-face)
 
         ;; functions
-        (,(rx symbol-start (or "var" "const" "fun" (seq "#def" (1+ word))) (1+ space) (group (seq (1+ (or word ?_ ?- ?>)) (? (any "!?")))))
+        (,(rx symbol-start (or "var" "const" "fun" (seq "#def" (1+ word)) "#keepmacro") (1+ space) (group (seq (1+ (or word ?_ ?- ?>)) (? (any "!?")))))
          (1 font-lock-function-name-face))
 
         ;; numbers

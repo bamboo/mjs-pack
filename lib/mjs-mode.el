@@ -92,7 +92,7 @@
         (,(rx symbol-start (or "var" "const" "fun")
               symbol-end) . mjs-def-face)
 
-        (,(rx symbol-start (or "#meta" "keep-meta")
+        (,(rx symbol-start (or "#meta" "#keep-meta")
               symbol-end) . mjs-modifier-face)
 
         (,(rx symbol-start (or "arguments" "require" "typeof")
@@ -121,7 +121,7 @@
 
 
         ;; preprocessor
-        (,(rx symbol-start (seq ?\# (1+ word))
+        (,(rx symbol-start (seq ?\# (1+ (or word ?_ ?- ?>)))
               symbol-end) . font-lock-warning-face)))
 
 

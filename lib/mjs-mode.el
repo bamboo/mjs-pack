@@ -95,7 +95,7 @@
         (,(rx symbol-start (or "#meta" "#keep-meta")
               symbol-end) . mjs-modifier-face)
 
-        (,(rx symbol-start (or "arguments" "require" "typeof")
+        (,(rx symbol-start (or "arguments" "require" "typeof" "instanceof")
               symbol-end) . mjs-builtin-face)
 
         (,(rx symbol-start (or "Object" "Array" "String"

@@ -186,4 +186,26 @@ otherwise it stays the same."
 
 (add-hook 'mjs-mode-hook 'rainbow-delimiters-mode)
 
+
+                                        ;flymake integration
+(defun flymake-mjs-init ()
+  (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                     'flymake-create-temp-inplace))
+         (local-file (file-relative-name
+                      temp-file
+                      (file-name-directory buffer-file-name))))
+    (list "mjs" (list "check" local-file))))
+
+(setq flymake-allowed-file-name-masks
+      (cons '(".+\\.mjs$"
+              flymake-mjs-init
+              flymake-simple-cleanup
+              flymake-get-real-file-name)
+            flymake-allowed-file-name-masks))
+
+(setq flymake-err-line-patterns ; regexp file-idx line-idx col-idx (optional) text-idx(optional), match-end to end of string is error text
+      (cons '("\\([^(]*\\)(\\([0-9]+\\),\\([0-9]+\\))\: \\(.+\\)"
+              1 2 3 4)
+            flymake-err-line-patterns))
+
 (provide 'mjs-mode)

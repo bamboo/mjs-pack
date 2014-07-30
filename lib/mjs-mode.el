@@ -208,4 +208,14 @@ otherwise it stays the same."
               1 2 3 4)
             flymake-err-line-patterns))
 
+(defcustom mjs-implies-flymake t
+  "if mjs-mode should imply `flymake-mode', default is t. "
+  :type 'boolean
+  :group 'mjs-mode)
+
+(add-hook 'mjs-mode-hook
+          (lambda ()
+            (when mjs-implies-flymake
+              (flymake-mode))))
+
 (provide 'mjs-mode)

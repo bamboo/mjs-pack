@@ -234,7 +234,7 @@ otherwise it stays the same."
                `(("\\_<\\(#->\\)\\_>"
                   (0 (progn (compose-region (match-beginning 1)
                                             (match-end 1)
-                                            "𝝺")
+                                            "λ")
                             'mjs-def-face)))
 
                  ("\\_<\\(fun\\)\\_>"
@@ -258,6 +258,6 @@ otherwise it stays the same."
                  ("\\_<\\(#it\\)\\_>"
                   (0 (progn (compose-region (match-beginning 1)
                                             (match-end 1)
-                                            "𝞌")
+                                            "ϰ")
                             'mjs-builtin-face))))))))
 (provide 'mjs-mode)

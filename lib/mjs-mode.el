@@ -218,4 +218,46 @@ otherwise it stays the same."
             (when mjs-implies-flymake
               (flymake-mode))))
 
+; custom symbol display
+
+(defcustom mjs-display-custom-symbols t
+  "if mjs-mode should replace certain programming language symbols such
+ as `fun' and `#->' by nicer looking one such as `ƒ' and `𝝺', default is t."
+  :type 'boolean
+  :group 'mjs-mode)
+
+(add-hook 'mjs-mode-hook
+          (lambda ()
+            (when mjs-display-custom-symbols
+              (font-lock-add-keywords
+               nil
+               `(("\\_<\\(#->\\)\\_>"
+                  (0 (progn (compose-region (match-beginning 1)
+                                            (match-end 1)
+                                            "𝝺")
+                            'mjs-def-face)))
+
+                 ("\\_<\\(fun\\)\\_>"
+                  (0 (progn (compose-region (match-beginning 1)
+                                            (match-end 1)
+                                            "ƒ")
+                            'mjs-def-face)))
+
+                 ("\\_<\\(->\\)\\_>"
+                  (0 (progn (compose-region (match-beginning 1)
+                                            (match-end 1)
+                                            "→")
+                            'mjs-def-face)))
+
+                 ("\s\\(!=\\)\s"
+                  (0 (progn (compose-region (match-beginning 1)
+                                            (match-end 1)
+                                            "≠")
+                            nil)))
+
+                 ("\\_<\\(#it\\)\\_>"
+                  (0 (progn (compose-region (match-beginning 1)
+                                            (match-end 1)
+                                            "𝞌")
+                            'mjs-builtin-face))))))))
 (provide 'mjs-mode)

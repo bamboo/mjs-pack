@@ -255,6 +255,24 @@ otherwise it stays the same."
                                             "≠")
                             nil)))
 
+                 ("\s\\(>=\\)\s"
+                  (0 (progn (compose-region (match-beginning 1)
+                                            (match-end 1)
+                                            "≥")
+                            nil)))
+
+                 ("\s\\(<=\\)\s"
+                  (0 (progn (compose-region (match-beginning 1)
+                                            (match-end 1)
+                                            "≤")
+                            nil)))
+
+                 ("\s\\(==\\)\s"
+                  (0 (progn (compose-region (match-beginning 1)
+                                            (match-end 1)
+                                            "≣")
+                            nil)))
+
                  ("\\_<\\(#it\\)\\_>"
                   (0 (progn (compose-region (match-beginning 1)
                                             (match-end 1)

@@ -166,9 +166,75 @@ otherwise it stays the same."
               (current-indentation))))
     (indent-to indent)))
 
+
+; blocks as sexps (borrowed from HAML mode which borrowed it from Python mode which...)
+(defun mjs-forward-through-whitespace (&optional backward)
+  "Move the point forward through any whitespace.
+The point will move forward at least one line, until it reaches
+either the end of the buffer or a line with no whitespace.
+
+If BACKWARD is non-nil, move the point backward instead."
+  (let ((arg (if backward -1 1))
+        (endp (if backward 'bobp 'eobp)))
+    (loop do (forward-line arg)
+          while (and (not (funcall endp))
+                     (looking-at "^[ \t]*$")))))
+
+(defun mjs-at-indent-p ()
+  "Return non-nil if the point is before any text on the line."
+  (let ((opoint (point)))
+    (save-excursion
+      (back-to-indentation)
+      (>= (point) opoint))))
+
+(defun mjs-forward-sexp (&optional arg)
+  "Move forward across one nested expression.
+With ARG, do it that many times.  Negative arg -N means move
+backward across N balanced expressions.
+
+A sexp in metascript is defined as a line of metascript code as well as any
+lines nested beneath it."
+  (interactive "p")
+  (or arg (setq arg 1))
+  (if (and (< arg 0) (not (mjs-at-indent-p)))
+      (back-to-indentation)
+    (while (/= arg 0)
+      (let ((indent (current-indentation)))
+        (loop do (mjs-forward-through-whitespace (< arg 0))
+              while (and (not (eobp))
+                         (not (bobp))
+                         (> (current-indentation) indent)))
+        (unless (eobp)
+          (back-to-indentation))
+        (setq arg (+ arg (if (> arg 0) -1 1)))))))
+
+(defun mjs-mark-sexp ()
+  "Mark the next metascript block."
+  (interactive)
+  (let ((forward-sexp-function 'mjs-forward-sexp))
+    (mark-sexp)))
+
+(defun mjs-backward-sexp (&optional arg)
+  "Move backward across one nested expression.
+With ARG, do it that many times.  Negative arg -N means move
+forward across N balanced expressions.
+
+A sexp in metascript is defined as a line of metascript code as well as any
+lines nested beneath it."
+  (interactive "p")
+  (mjs-forward-sexp (if arg (- arg) -1)))
+
+(defun mjs-repl ()
+  (interactive)
+  (pop-to-buffer
+   (make-comint "mjs-repl" "mjsish" nil "--no-tty")))
+
 (defvar mjs-mode-map
   (let ((map (make-sparse-keymap "Metascript")))
     (define-key map (kbd "RET") 'newline-and-indent)
+    (define-key map "\C-\M-f" 'mjs-forward-sexp)
+    (define-key map "\C-\M-b" 'mjs-backward-sexp)
+    (define-key map (kbd "C-M-SPC") 'mjs-mark-sexp)
     map))
 
 (define-derived-mode mjs-mode fundamental-mode "MJS"

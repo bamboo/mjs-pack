@@ -225,16 +225,34 @@ lines nested beneath it."
   (interactive "p")
   (mjs-forward-sexp (if arg (- arg) -1)))
 
+(defun mjs-region-string ()
+  (buffer-substring (region-beginning) (region-end)))
+
+(defun mjs-repl-make-comint ()
+  (make-comint "mjs-repl" "mjsish" nil "--no-tty"))
+
 (defun mjs-repl ()
   (interactive)
-  (pop-to-buffer
-   (make-comint "mjs-repl" "mjsish" nil "--no-tty")))
+  (pop-to-buffer (mjs-repl-make-comint)))
+
+(defun mjs-chomp-end (str)
+  "Chomp tailing whitespace from STR."
+  (replace-regexp-in-string (rx (* (any " \t\n")) eos)
+                            ""
+                            str))
+
+(defun mjs-repl-eval (&optional process)
+  (interactive)
+  (let ((code (concat (mjs-chomp-end (mjs-region-string)) ";\n"))
+        (repl (or process (mjs-repl))))
+    (comint-send-string repl code)))
 
 (defvar mjs-mode-map
   (let ((map (make-sparse-keymap "Metascript")))
     (define-key map (kbd "RET") 'newline-and-indent)
     (define-key map "\C-\M-f" 'mjs-forward-sexp)
     (define-key map "\C-\M-b" 'mjs-backward-sexp)
+    (define-key map "\C-\M-x" 'mjs-repl-eval)
     (define-key map (kbd "C-M-SPC") 'mjs-mark-sexp)
     map))
 

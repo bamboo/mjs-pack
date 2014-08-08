@@ -305,15 +305,23 @@ lines nested beneath it."
 
 ; custom symbol display
 
-(defcustom mjs-display-custom-symbols t
+(defcustom mjs-custom-symbol-display-enabled t
   "if mjs-mode should replace certain programming language symbols such
  as `fun' and `#->' by nicer looking one such as `ƒ' and `𝝺', default is t."
   :type 'boolean
   :group 'mjs-mode)
 
+(defcustom mjs-custom-lambda-parameter "Χ"
+  "Custom symbol for #it"
+  :type 'string
+  :group 'mjs-mode)
+
+(defmjsface mjs-custom-lambda-parameter-face mjs-builtin-face
+  "Custom lambda parameter face")
+
 (add-hook 'mjs-mode-hook
           (lambda ()
-            (when mjs-display-custom-symbols
+            (when mjs-custom-symbol-display-enabled
               (font-lock-add-keywords
                nil
                `(("\\_<\\(#->\\)\\_>"
@@ -361,6 +369,6 @@ lines nested beneath it."
                  ("\\_<\\(#it\\)\\_>"
                   (0 (progn (compose-region (match-beginning 1)
                                             (match-end 1)
-                                            "ϰ")
-                            'mjs-builtin-face))))))))
+                                            mjs-custom-lambda-parameter)
+                            mjs-custom-lambda-parameter-face))))))))
 (provide 'mjs-mode)

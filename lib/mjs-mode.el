@@ -233,8 +233,17 @@ lines nested beneath it."
   :type 'string
   :group 'mjs-mode)
 
+(defcustom inferior-mjs-repl-port 8484
+  "Network port to start repl evaluation server."
+  :type 'number
+  :group 'mjs-mode)
+
 (defun mjs-repl-make-comint ()
-  (make-comint "mjs-repl" inferior-mjs-repl-program nil "--no-tty"))
+  (make-comint "mjs-repl" inferior-mjs-repl-program nil
+               "--no-tty" "--port" (number-to-string inferior-mjs-repl-port)))
+
+(defun mjs-repl-connection ()
+  (make-comint "mjs-repl connection" (cons "localhost" inferior-mjs-repl-port)))
 
 (defun mjs-repl ()
   (interactive)
@@ -249,7 +258,7 @@ lines nested beneath it."
 (defun mjs-repl-eval (&optional process)
   (interactive)
   (let ((code (concat (mjs-chomp-end (mjs-region-string)) ";\n"))
-        (repl (or process (mjs-repl))))
+        (repl (or process (mjs-repl-connection))))
     (comint-send-string repl code)))
 
 (defvar mjs-mode-map

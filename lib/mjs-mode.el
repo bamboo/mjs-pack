@@ -260,8 +260,16 @@ lines nested beneath it."
     (if package
         (let ((default-directory package)
               (package-name (mjs-package-name package)))
-          (pop-to-buffer (make-comint (concat package-name " tests") "npm" nil "test")))
+          (with-current-buffer
+              (pop-to-buffer
+               (make-comint (concat package-name " tests") "npm" nil "test"))
+            (compilation-minor-mode)))
       (message "couldn't find package.json for %s" (buffer-name)))))
+
+(add-to-list 'compilation-error-regexp-alist-alist
+             '(mjs-stack-trace "at .*? (\\(.+?\\):\\([0-9]+\\):\\([0-9]+\\))"
+                               1 2 3))
+(add-to-list 'compilation-error-regexp-alist 'mjs-stack-trace)
 
 (defun mjs-repl ()
   (interactive)

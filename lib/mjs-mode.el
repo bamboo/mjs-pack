@@ -228,8 +228,13 @@ lines nested beneath it."
 (defun mjs-region-string ()
   (buffer-substring (region-beginning) (region-end)))
 
+(defcustom inferior-mjs-repl-program "mjsish"
+  "Path to mjs repl application."
+  :type 'string
+  :group 'mjs-mode)
+
 (defun mjs-repl-make-comint ()
-  (make-comint "mjs-repl" "mjsish" nil "--no-tty"))
+  (make-comint "mjs-repl" inferior-mjs-repl-program nil "--no-tty"))
 
 (defun mjs-repl ()
   (interactive)

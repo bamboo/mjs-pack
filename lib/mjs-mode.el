@@ -249,10 +249,18 @@ lines nested beneath it."
   "Locates the npm package root of the current buffer."
   (locate-dominating-file (buffer-file-name) "package.json"))
 
+(defun mjs-package-json (package-root)
+  (json-read-file (concat package-root "/package.json")))
+
+(defun mjs-buffer-package-json ()
+  (let ((package-root (mjs-buffer-package-root)))
+    (when package-root
+      (mjs-package-json package-root))))
+
 (defun mjs-package-name (package-root)
   "Returns the package name as defined in the package.json file at `package-root'."
   (require 'json)
-  (cdr (assoc 'name (json-read-file (concat package-root "/package.json")))))
+  (cdr (assoc 'name (mjs-package-json package-root))))
 
 (defun mjs-run-tests ()
   (interactive)
@@ -339,9 +347,26 @@ lines nested beneath it."
   :type 'boolean
   :group 'mjs-mode)
 
+(defun mjs-assoc-in (alist keys)
+  (when alist
+    (let ((key (car keys))
+          (keys (cdr keys)))
+      (let ((value (assoc key alist)))
+        (if keys
+            (mjs-assoc-in (cdr value) keys)
+          value)))))
+
+(defun mjs-package-json-dev-dependency (name package-json)
+  (mjs-assoc-in package-json `(devDependencies ,name)))
+
+(defun mjs-check-available? ()
+  (let ((package-json (mjs-buffer-package-json)))
+    (when package-json
+      (mjs-package-json-dev-dependency 'mjs-check package-json))))
+
 (add-hook 'mjs-mode-hook
           (lambda ()
-            (when mjs-implies-flymake
+            (when (and mjs-implies-flymake (mjs-check-available?))
               (flymake-mode))))
 
 ; custom symbol display

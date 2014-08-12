@@ -245,6 +245,24 @@ lines nested beneath it."
 (defun mjs-repl-connection ()
   (make-comint "mjs-repl connection" (cons "localhost" inferior-mjs-repl-port)))
 
+(defun mjs-buffer-package-root ()
+  "Locates the npm package root of the current buffer."
+  (locate-dominating-file (buffer-file-name) "package.json"))
+
+(defun mjs-package-name (package-root)
+  "Returns the package name as defined in the package.json file at `package-root'."
+  (require 'json)
+  (cdr (assoc 'name (json-read-file (concat package-root "/package.json")))))
+
+(defun mjs-run-tests ()
+  (interactive)
+  (let ((package (mjs-buffer-package-root)))
+    (if package
+        (let ((default-directory package)
+              (package-name (mjs-package-name package)))
+          (pop-to-buffer (make-comint (concat package-name " tests") "npm" nil "test")))
+      (message "couldn't find package.json for %s" (buffer-name)))))
+
 (defun mjs-repl ()
   (interactive)
   (pop-to-buffer (mjs-repl-make-comint)))
@@ -267,6 +285,7 @@ lines nested beneath it."
     (define-key map "\C-\M-f" 'mjs-forward-sexp)
     (define-key map "\C-\M-b" 'mjs-backward-sexp)
     (define-key map "\C-\M-x" 'mjs-repl-eval)
+    (define-key map "\C-c," 'mjs-run-tests)
     (define-key map (kbd "C-M-SPC") 'mjs-mark-sexp)
     map))
 

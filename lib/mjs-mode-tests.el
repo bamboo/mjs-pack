@@ -29,9 +29,9 @@
   "Create a temporary buffer, assign it to symbol, evaluate BODY like `progn', and then kill the buffer."
   (declare (indent 1) (debug t))
   `(let ((,symbol (mjs-repl-make-comint)))
-     (set-process-query-on-exit-flag (get-buffer-process ,symbol) nil)
      (unwind-protect
          (progn
+           (set-process-query-on-exit-flag (get-buffer-process ,symbol) nil)
            (mjs-accept-repl-output ,symbol)
            ,@body)
        (progn
@@ -69,4 +69,4 @@
 
 (ert-deftest mjs-repl-eval-sends-enclosing-sexp-when-region-is-not-active ()
   (test-mjs-repl-eval-after
-   (lambda () (goto-char (point-end)))))
+   (lambda () (goto-char (point-max)))))

@@ -369,25 +369,25 @@ lines nested beneath it."
             (when (and mjs-implies-flymake (mjs-check-available?))
               (flymake-mode))))
 
-; custom symbol display
+; pretty symbol display
 
-(defcustom mjs-custom-symbol-display-enabled t
+(defcustom mjs-pretty-symbol-display-enabled t
   "if mjs-mode should replace certain programming language symbols such
- as `fun' and `#->' by nicer looking one such as `ƒ' and `𝝺', default is t."
+ as `fun' and `#->' by prettier ones such as `ƒ' and `𝝺', default is t."
   :type 'boolean
   :group 'mjs-mode)
 
-(defcustom mjs-custom-lambda-parameter "Χ"
-  "Custom symbol for #it"
+(defcustom mjs-pretty-lambda-parameter "Χ"
+  "Pretty symbol for #it"
   :type 'string
   :group 'mjs-mode)
 
-(defmjsface mjs-custom-lambda-parameter-face mjs-builtin-face
-  "Custom lambda parameter face")
+(defmjsface mjs-pretty-lambda-parameter-face mjs-builtin-face
+  "Pretty lambda parameter face")
 
 (add-hook 'mjs-mode-hook
           (lambda ()
-            (when mjs-custom-symbol-display-enabled
+            (when mjs-pretty-symbol-display-enabled
               (font-lock-add-keywords
                nil
                `(("\\_<\\(#->\\)\\_>"
@@ -435,6 +435,6 @@ lines nested beneath it."
                  ("\\_<\\(#it\\)\\_>"
                   (0 (progn (compose-region (match-beginning 1)
                                             (match-end 1)
-                                            mjs-custom-lambda-parameter)
-                            mjs-custom-lambda-parameter-face))))))))
+                                            mjs-pretty-lambda-parameter)
+                            mjs-pretty-lambda-parameter-face))))))))
 (provide 'mjs-mode)

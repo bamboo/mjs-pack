@@ -1,3 +1,5 @@
+(require 'mjs-mode)
+
 (defcustom inferior-mjs-repl-program "mjsish"
   "Path to mjs repl application."
   :type 'string
@@ -10,7 +12,8 @@
 
 (defun mjs-repl ()
   (interactive)
-  (pop-to-buffer (mjs-repl-make-comint)))
+  (pop-to-buffer (mjs-repl-make-comint))
+  (mjs-repl-mode))
 
 (defun mjs-repl-make-comint ()
   (make-comint "mjs-repl" inferior-mjs-repl-program nil
@@ -33,5 +36,12 @@
 
 (defun mjs-region-string ()
   (buffer-substring (region-beginning) (region-end)))
+
+
+(define-derived-mode mjs-repl-mode comint-mode "Metascript REPL"
+  "Major mode for Metascript REPL"
+  :syntax-table mjs-mode-syntax-table
+  (setq-local font-lock-defaults '(nil nil t)))
+
 
 (provide 'mjs-repl-mode)

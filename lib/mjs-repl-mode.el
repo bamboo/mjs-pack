@@ -1,4 +1,5 @@
 (require 'mjs-mode)
+(require 'comint)
 
 (defcustom inferior-mjs-repl-program "mjsish"
   "Path to mjs repl application."

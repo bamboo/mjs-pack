@@ -27,7 +27,18 @@
     (comint-send-string repl code)))
 
 (defun mjs-repl-connection ()
-  (make-comint "mjs-repl connection" (cons "localhost" inferior-mjs-repl-port)))
+  (let ((conn (make-comint "mjs repl connection" (cons "localhost" inferior-mjs-repl-port))))
+    (with-current-buffer conn
+      (mjs-repl-connection-mode))
+    conn))
+
+(defun mjs-repl-connection-output (string)
+  (message (first (split-string string "\n")))
+  nil)
+
+(define-derived-mode mjs-repl-connection-mode comint-mode "mjs repl connection"
+  "Major mode for mjs repl connection"
+  (add-hook 'comint-output-filter-functions 'mjs-repl-connection-output nil t))
 
 
 (defun mjs-chomp-end (string)

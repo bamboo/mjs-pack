@@ -29,11 +29,12 @@
 (defun mjs-repl-connection ()
   (make-comint "mjs-repl connection" (cons "localhost" inferior-mjs-repl-port)))
 
-(defun mjs-chomp-end (str)
-  "Chomp tailing whitespace from STR."
+
+(defun mjs-chomp-end (string)
+  "Chomp trailing whitespace from `string'."
   (replace-regexp-in-string (rx (* (any " \t\n")) eos)
                             ""
-                            str))
+                            string))
 
 (defun mjs-region-string ()
   (buffer-substring (region-beginning) (region-end)))

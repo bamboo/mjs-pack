@@ -95,11 +95,11 @@
         (,(rx symbol-start (or "#meta" "#keep-meta")
               symbol-end) . mjs-modifier-face)
 
-        (,(rx symbol-start (or "arguments" "require" "typeof" "instanceof")
+        (,(rx symbol-start (or "arguments" "require" "typeof" "instanceof" "parseInt" "parse-int")
               symbol-end) . mjs-builtin-face)
 
         (,(rx symbol-start (or "Object" "Array" "String"
-                               "Function" "Number" "Math" "parseInt"
+                               "Function" "Number" "Math"
                                "Boolean" "Date" "JSON" "Error")
               symbol-end) . mjs-type-name-face)
 

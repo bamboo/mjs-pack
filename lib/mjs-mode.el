@@ -123,9 +123,8 @@
         (,(rx symbol-start (or (1+ digit) (seq "0x" (1+ hex-digit)))
               symbol-end) . mjs-number-face)
 
-
         ;; preprocessor
-        (,(rx symbol-start (seq ?\# (1+ (or word ?_ ?- ?>)))
+        (,(rx symbol-start ?\# (1+ (or word ?_ ?- ?>))
               symbol-end) . font-lock-warning-face)))
 
 

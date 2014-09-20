@@ -79,6 +79,18 @@
 (defmjsface mjs-type-name-face font-lock-type-face
   "Highlight types names.")
 
+(defmjsface mjs-object-literal-key-face font-lock-variable-name-face
+  "Highlight object literal keys.")
+
+(defmjsface mjs-function-name-face font-lock-function-name-face
+  "Highlight function names.")
+
+(defmjsface mjs-variable-name-face font-lock-variable-name-face
+  "Highlight variable names.")
+
+(defmjsface mjs-placeholder-face font-lock-preprocessor-face
+  "Highlight placeholders (symbols starting with a #)")
+
 (defvar mjs-font-lock-keywords nil
   "Additional expressions to highlight in Metascript mode.")
 
@@ -112,20 +124,24 @@
               symbol-end) . mjs-control-flow-face)
 
         ;; functions
-        (,(rx symbol-start (or "var" "const" "fun" (seq "#def" (1+ word)) "#keepmacro" "#metaimport" "#external") (1+ space) (group (seq (1+ (or word ?_ ?- ?>)) (? (any "!?")))))
-         (1 font-lock-function-name-face))
+        (,(rx symbol-start (or "fun" (seq "#def" (1+ word)) "#keepmacro") (1+ space) (group (seq (1+ (or word ?_ ?- ?>)) (? (any "!?")))))
+         (1 mjs-function-name-face))
+
+        ;; variable names
+        (,(rx symbol-start (or "var" "const" "#metaimport" "#external") (1+ space) (group (seq (1+ (or word ?_ ?- ?>)) (? (any "!?")))))
+         (1 mjs-variable-name-face))
 
         ;; object literal keys
         (,(rx symbol-start (group (seq (1+ (or word ?_ ?- ?>)) (? (any "!?")))) ?:)
-         (1 font-lock-warning-face))
+         (1 mjs-object-literal-key-face))
 
         ;; numbers
         (,(rx symbol-start (or (1+ digit) (seq "0x" (1+ hex-digit)))
               symbol-end) . mjs-number-face)
 
-        ;; preprocessor
+        ;; placeholders
         (,(rx symbol-start ?\# (1+ (or word ?_ ?- ?>))
-              symbol-end) . font-lock-warning-face)))
+              symbol-end) . mjs-placeholder-face)))
 
 
 (defvar mjs-mode-syntax-table nil

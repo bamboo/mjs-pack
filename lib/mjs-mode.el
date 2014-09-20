@@ -115,6 +115,10 @@
         (,(rx symbol-start (or "var" "const" "fun" (seq "#def" (1+ word)) "#keepmacro" "#metaimport" "#external") (1+ space) (group (seq (1+ (or word ?_ ?- ?>)) (? (any "!?")))))
          (1 font-lock-function-name-face))
 
+        ;; object literal keys
+        (,(rx symbol-start (group (seq (1+ (or word ?_ ?- ?>)) (? (any "!?")))) ?:)
+         (1 font-lock-warning-face))
+
         ;; numbers
         (,(rx symbol-start (or (1+ digit) (seq "0x" (1+ hex-digit)))
               symbol-end) . mjs-number-face)

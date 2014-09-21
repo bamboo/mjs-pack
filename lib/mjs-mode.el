@@ -274,13 +274,15 @@ lines nested beneath it."
       (message "couldn't find package.json for %s" (buffer-name)))))
 
 (add-to-list 'compilation-error-regexp-alist-alist
-             '(mjs-stack-trace "at \\([^(]+?\\):\\([0-9]+\\):\\([0-9]+\\)"
-                               1 2 3))
+             '(mjs-stack-trace
+               "at \\([^(\n]+?\\):\\([0-9]+\\):\\([0-9]+\\)"
+               1 2 3))
 (add-to-list 'compilation-error-regexp-alist 'mjs-stack-trace)
 
 (add-to-list 'compilation-error-regexp-alist-alist
-             '(mjs-stack-trace-with-function-name "at .*? (\\(.+?\\):\\([0-9]+\\):\\([0-9]+\\))"
-                               1 2 3))
+             '(mjs-stack-trace-with-function-name
+               "at [^\\n]*? (\\(.+?\\):\\([0-9]+\\):\\([0-9]+\\))"
+               1 2 3))
 (add-to-list 'compilation-error-regexp-alist 'mjs-stack-trace-with-function-name)
 
 
